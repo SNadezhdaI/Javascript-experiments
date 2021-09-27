@@ -1,0 +1,83 @@
+<!doctype HTML>
+
+<html>
+<head>
+    <title>Модель хаотического движения</title>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+<canvas id="canvas" width="200" height="200"></canvas>
+
+<script>
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+
+    var x = 100;
+    var y = 100;
+
+    setInterval(function () {
+        ctx.clearRect(0, 0, 200, 200);
+        initScene(x, y);
+        x = updateCoordinate(x);
+        y = updateCoordinate(y);
+        ctx.strokeRect(0, 0, 200, 200);
+    }, 30)
+
+    /**
+     * Отрисовка объекта
+     * @param {number} x
+     * @param {number} y
+     * @param {number} radius
+     * @param {boolean} fillCircle
+     */
+    function renderObject(x, y, radius, fillCircle) {
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2, false);
+        if (fillCircle) {
+            ctx.fill();
+        } else {
+            ctx.stroke();
+        }
+    }
+
+    /**
+     * Инициализация сцены
+     * @param {number} x
+     * @param {number} y
+     */
+    function initScene(x, y) {
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "Black";
+        ctx.fillStyle = "Gold";
+
+        renderObject(x, y, 8, true);
+        renderObject(x, y, 8, false);
+        renderObject(x - 5, y - 11, 5, false);
+        renderObject(x + 5, y - 11, 5, false);
+        renderObject(x - 2, y - 1, 2, false);
+        renderObject(x + 2, y - 1, 2, false);
+    }
+
+    /**
+     * Смещение координаты
+     * @param {number} coordinate
+     * @returns {number}
+     */
+    function updateCoordinate(coordinate) {
+        var offset = Math.random() * 4 - 2;
+        coordinate += offset;
+
+        if (coordinate > 200) {
+            coordinate = 200;
+        }
+
+        if (coordinate < 0) {
+            coordinate = 0;
+        }
+
+        return coordinate;
+    }
+</script>
+</body>
+</html>

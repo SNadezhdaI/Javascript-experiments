@@ -1,0 +1,82 @@
+<!doctype HTML>
+
+<html>
+<head>
+    <title>Упрощённая модель Броуновского движения</title>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+<canvas id="canvas" width="400" height="400"></canvas>
+
+<script>
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+
+    molecule.prototype.draw = function () {
+        renderObject(this.x, this.y, 5, true);
+    }
+
+    molecule.prototype.move = function () {
+        this.x += this.xSpeed;
+        this.y += this.ySpeed;
+    }
+
+    molecule.prototype.checkCollection = function () {
+        if (this.x < 0 || this.x > 400) {
+            this.xSpeed = -this.xSpeed;
+        }
+        if (this.y < 0 || this.y > 400) {
+            this.ySpeed = -this.ySpeed;
+        }
+    };
+
+    var colors = ["Black", "Pink", "Green", "Gold", "Deep Purple", "Blue", "Red", "Deep Orange", "Teal", "Lime"];
+    var balls = [];
+    for (var i = 0; i < 10; i++) {
+        var ball = new molecule;
+        balls.push(ball);
+    }
+
+    setInterval(function () {
+        ctx.clearRect(0, 0, 400, 400);
+
+        for (var i = 0; i < 10; i++) {
+            ctx.fillStyle = colors[i];
+            balls[i].draw();
+            balls[i].move();
+            balls[i].checkCollection();
+        }
+
+        ctx.strokeRect(0, 0, 400, 400);
+    }, 30);
+
+    /**
+     * Инициализация объекта
+     */
+    function molecule() {
+        this.x = 200;
+        this.y = 200;
+        this.xSpeed = -(Math.random() * 10 - 5);
+        this.ySpeed = (Math.random() * 10 - 5);
+    }
+
+    /**
+     * Отрисовка объекта
+     * @param {number} x
+     * @param {number} y
+     * @param {number} radius
+     * @param {boolean} fillCircle
+     */
+    function renderObject(x, y, radius, fillCircle) {
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2, false);
+        if (fillCircle) {
+            ctx.fill();
+        } else {
+            ctx.stroke();
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!doctype HTML>
+<html>
+
+<head>
+    <title>Игра Виселица</title>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+<p>Обновите страницу, чтобы сыграть ещё раз!</p>
+<script>
+    var word = initWord();
+    var output = setupAnserArray(word);
+    var failCount = 0;
+    var remainingLetter = word.length;
+
+    while ((output.join("") != word) && (failCount != (word.length + 5))) {
+        showPlayerProgress(output);
+        var countGuess = word.length + 5 - failCount;
+        var letter = getGuess();
+        failCount++;
+        if (letter === null) {
+            break;
+        } else if (letter.length > 1) {
+            alert("Пожалуйста, введите только одну букву");
+        } else {
+            var correctGuesses = updateGame(word, letter, output);
+            remainingLetter -= correctGuesses;
+
+        }
+    }
+
+    showAnswerAndCongratulatedPlayer();
+
+    function setupAnserArray(word) {
+        output = [];
+        for (var i = 0; i < word.length; i++) {
+            output[i] = "_";
+        }
+        return output;
+    }
+
+    /**
+     * Инициализация слова
+     * @returns {string}
+     */
+    function initWord() {
+        var words = ["финик", "челюсти", "мороз", "охота", "кошка"];
+        return words[Math.floor(Math.random() * words.length)];
+    }
+
+    /**
+     * Отображение прогресса пользователя
+     * @param {array} output
+     */
+    function showPlayerProgress(output) {
+        return alert(output.join(" "));
+    }
+
+    /**
+     * Отображение подсказки
+     * @returns {string}
+     */
+    function getGuess() {
+        return prompt("Угадайте " + remainingLetter + " букв или нажмите ОТМЕНА для выхода. У Вас " + countGuess + " попыток").toLowerCase();
+    }
+
+    /**
+     * Отображение результата игры
+     */
+    function showAnswerAndCongratulatedPlayer() {
+        if (output.join("") === word) {
+            return alert("Поздравляю, Вы ввели правильное слово: " + output.join("") + "!");
+        } else {
+            return alert("Мне очень жаль, у Вас закончились попытки и Вы не угадали слово. Обновите страницу, если хотите сыграть ещё раз!");
+        }
+    }
+
+    /**
+     * Формирование подсказки
+     * @param {array} word
+     * @param {string} letter
+     * @param {array} output
+     * @returns {number}
+     */
+    function updateGame(word, letter, output) {
+        count = 0;
+        for (var i = 0; i < word.length; i++) {
+            if ((letter === word[i]) && (output[i] === "_")) {
+                output[i] = letter;
+                count++;
+            }
+        }
+
+        return count;
+    }
+</script>
+</body>
+</html>
